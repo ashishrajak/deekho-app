@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 import 'package:my_flutter_app/models/OfferingService_dto.dart';
 
@@ -59,7 +60,7 @@ class MockData {
       offeringCode: 'BIKE-SER-001',
       title: 'Bike Service',
       description: 'Professional bike servicing including oil change, brake check, and full inspection',
-      category: 'vehicle_service+bike+service',
+      category: ServiceCategoryDto(id: 'id', name: 'name'),
       status: 'ACTIVE',
       verified: true,
       timing: ServiceTiming(
@@ -93,7 +94,7 @@ class MockData {
       offeringCode: 'BIKE-WASH-001',
       title: 'Bike Wash',
       description: 'Complete bike washing and polishing service',
-      category: 'vehicle_service+bike+wash',
+      category: ServiceCategoryDto(id: 'id', name: 'name'),
       status: 'ACTIVE',
       verified: true,
       timing: ServiceTiming(
@@ -127,7 +128,7 @@ class MockData {
       offeringCode: 'BIKE-REP-001',
       title: 'Bike Repair',
       description: 'All types of bike repair services',
-      category: 'vehicle_service+bike+repair',
+      category: ServiceCategoryDto(id: 'id', name: 'name'),
       status: 'ACTIVE',
       verified: true,
       timing: ServiceTiming(
@@ -161,7 +162,7 @@ class MockData {
       offeringCode: 'BIKE-ACC-001',
       title: 'Bike Accessories',
       description: 'Bike accessories installation and sales',
-      category: 'vehicle_service+bike+accessories',
+      category: ServiceCategoryDto(id: 'id', name: 'name'),
       status: 'ACTIVE',
       verified: true,
       timing: ServiceTiming(
@@ -270,7 +271,7 @@ class MockData {
     
     return offerings.where((offering) => 
       offering.id != offeringId && 
-      offering.category.split('+').first == currentOffering.category.split('+').first
+      offering.category.name.split('+').first == currentOffering.category.name.split('+').first
     ).toList();
   }
 
@@ -320,7 +321,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(context),
@@ -340,16 +341,16 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
   return SliverAppBar(
     expandedHeight: 200,
     pinned: true,
-    backgroundColor: AppColors.cardBackground,
+    backgroundColor: AppTheme.cardBackground,
     elevation: 0,
     leading: IconButton(
       icon: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground.withOpacity(0.9),
+          color: AppTheme.cardBackground.withOpacity(0.9),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Icon(Icons.arrow_back_ios, size: 18, color: AppColors.textDark),
+        child: const Icon(Icons.arrow_back_ios, size: 18, color: AppTheme.textDark),
       ),
       onPressed: () => Navigator.pop(context),
     ),
@@ -360,8 +361,8 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.primaryBlue.withOpacity(0.1),
-              AppColors.backgroundWhite,
+              AppTheme.primaryBlue.withOpacity(0.1),
+              AppTheme.backgroundColor,
             ],
           ),
         ),
@@ -373,7 +374,7 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primaryBlue.withOpacity(0.2),
+                  color: AppTheme.primaryBlue.withOpacity(0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -387,9 +388,9 @@ class _ServiceDetailScreenState extends State<ServiceDetailScreen> {
                     : 'https://via.placeholder.com/200x120/1E88E5/FFFFFF?text=${Uri.encodeComponent(widget.service.title)}',
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  color: AppColors.primaryBlue,
+                  color: AppTheme.primaryBlue,
                   child: Icon(
-                    _getCategoryIcon(widget.service.category),
+                    _getCategoryIcon(widget.service.category.name),
                     color: Colors.white,
                     size: 50,
                   ),
@@ -422,9 +423,9 @@ IconData _getCategoryIcon(String category) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: AppColors.primaryBlue),
+            CircularProgressIndicator(color: AppTheme.primaryBlue),
             const SizedBox(height: 16),
-            Text('Loading service details...', style: AppTextStyles.bodyMedium),
+            Text('Loading service details...', style: AppTheme.bodyMedium),
           ],
         ),
       ),
@@ -437,7 +438,7 @@ IconData _getCategoryIcon(String category) {
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: AppTheme.cardBackground,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -450,24 +451,24 @@ IconData _getCategoryIcon(String category) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.service.title, style: AppTextStyles.headlineMedium),
+            Text(widget.service.title, style: AppTheme.headlineMedium),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.primaryBlue.withOpacity(0.1),
+                color: AppTheme.primaryBlue.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                widget.service.category,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.primaryBlue,
+                widget.service.category.name,
+                style: AppTheme.caption.copyWith(
+                  color: AppTheme.primaryBlue,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
             const SizedBox(height: 12),
-            Text(widget.service.description, style: AppTextStyles.bodyLarge),
+            Text(widget.service.description, style: AppTheme.bodyLarge),
           ],
         ),
       ),
@@ -483,9 +484,9 @@ IconData _getCategoryIcon(String category) {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Icon(Icons.local_offer, color: AppColors.accentOrange, size: 24),
+                Icon(Icons.local_offer, color: AppTheme.accentOrange, size: 24),
                 const SizedBox(width: 8),
-                Text('Best Offers Available', style: AppTextStyles.headlineSmall),
+                Text('Best Offers Available', style: AppTheme.headlineSmall),
               ],
             ),
           ),
@@ -500,10 +501,10 @@ IconData _getCategoryIcon(String category) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(16),
         border: offer.isBestOffer 
-            ? Border.all(color: AppColors.accentOrange, width: 2)
+            ? Border.all(color: AppTheme.accentOrange, width: 2)
             : null,
         boxShadow: [
           BoxShadow(
@@ -522,12 +523,12 @@ IconData _getCategoryIcon(String category) {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.accentOrange,
+                  color: AppTheme.accentOrange,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   'BEST OFFER',
-                  style: AppTextStyles.caption.copyWith(
+                  style: AppTheme.caption.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -541,11 +542,11 @@ IconData _getCategoryIcon(String category) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(offer.title, style: AppTextStyles.headlineSmall),
+                      Text(offer.title, style: AppTheme.headlineSmall),
                       const SizedBox(height: 4),
-                      Text(offer.description, style: AppTextStyles.bodyMedium),
+                      Text(offer.description, style: AppTheme.bodyMedium),
                       const SizedBox(height: 8),
-                      Text(offer.validUntil, style: AppTextStyles.caption),
+                      Text(offer.validUntil, style: AppTheme.caption),
                     ],
                   ),
                 ),
@@ -556,12 +557,12 @@ IconData _getCategoryIcon(String category) {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.successColor,
+                        color: AppTheme.successColor,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         offer.discount,
-                        style: AppTextStyles.caption.copyWith(
+                        style: AppTheme.caption.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -570,12 +571,12 @@ IconData _getCategoryIcon(String category) {
                     const SizedBox(height: 8),
                     Text(
                       offer.originalPrice,
-                      style: AppTextStyles.bodyMedium.copyWith(
+                      style: AppTheme.bodyMedium.copyWith(
                         decoration: TextDecoration.lineThrough,
-                        color: AppColors.textLight,
+                        color: AppTheme.textLight,
                       ),
                     ),
-                    Text(offer.discountedPrice, style: AppTextStyles.headlineSmall),
+                    Text(offer.discountedPrice, style: AppTheme.headlineSmall),
                   ],
                 ),
               ],
@@ -588,13 +589,13 @@ IconData _getCategoryIcon(String category) {
                   // Handle book offer
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryBlue,
+                  backgroundColor: AppTheme.primaryBlue,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text('Book This Offer', style: AppTextStyles.buttonText),
+                child: Text('Book This Offer', style: AppTheme.buttonText),
               ),
             ),
           ],
@@ -612,7 +613,7 @@ IconData _getCategoryIcon(String category) {
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
             child: Text(
               'Service Providers for ${widget.service.title}',
-              style: AppTextStyles.headlineSmall.copyWith(
+              style: AppTheme.headlineSmall.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -623,7 +624,7 @@ IconData _getCategoryIcon(String category) {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'No vendors available for this service at the moment',
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textLight),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.textLight),
               ),
             ),
           if (vendors.isNotEmpty)
@@ -637,7 +638,7 @@ IconData _getCategoryIcon(String category) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -672,7 +673,7 @@ IconData _getCategoryIcon(String category) {
                       vendor.imageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        color: AppColors.primaryBlue,
+                        color: AppTheme.primaryBlue,
                         child: const Icon(Icons.person, color: Colors.white, size: 30),
                       ),
                     ),
@@ -685,33 +686,33 @@ IconData _getCategoryIcon(String category) {
                     children: [
                       Row(
                         children: [
-                          Text(vendor.name, style: AppTextStyles.headlineSmall),
+                          Text(vendor.name, style: AppTheme.headlineSmall),
                           if (vendor.isVerified) ...[
                             const SizedBox(width: 8),
-                            Icon(Icons.verified, color: AppColors.successColor, size: 16),
+                            Icon(Icons.verified, color: AppTheme.successColor, size: 16),
                           ],
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Text(vendor.specialty, style: AppTextStyles.bodyMedium),
+                      Text(vendor.specialty, style: AppTheme.bodyMedium),
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: AppColors.successColor.withOpacity(0.1),
+                              color: AppTheme.successColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.star, color: AppColors.successColor, size: 14),
+                                Icon(Icons.star, color: AppTheme.successColor, size: 14),
                                 const SizedBox(width: 4),
                                 Text(
                                   '${vendor.rating} (${vendor.reviewCount})',
-                                  style: AppTextStyles.caption.copyWith(
-                                    color: AppColors.successColor,
+                                  style: AppTheme.caption.copyWith(
+                                    color: AppTheme.successColor,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -719,9 +720,9 @@ IconData _getCategoryIcon(String category) {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Icon(Icons.location_on, color: AppColors.textLight, size: 14),
+                          Icon(Icons.location_on, color: AppTheme.textLight, size: 14),
                           const SizedBox(width: 4),
-                          Text(vendor.distance, style: AppTextStyles.caption),
+                          Text(vendor.distance, style: AppTheme.caption),
                         ],
                       ),
                     ],
@@ -739,7 +740,7 @@ IconData _getCategoryIcon(String category) {
                 children: [
                   Text(
                     'Services Provided:',
-                    style: AppTextStyles.bodyMedium.copyWith(
+                    style: AppTheme.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -762,13 +763,13 @@ IconData _getCategoryIcon(String category) {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryBlue.withOpacity(0.1),
+                            color: AppTheme.primaryBlue.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
                             service.title,
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.primaryBlue,
+                            style: AppTheme.caption.copyWith(
+                              color: AppTheme.primaryBlue,
                             ),
                           ),
                         ),
@@ -789,13 +790,13 @@ IconData _getCategoryIcon(String category) {
                       // Handle book now
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
+                      backgroundColor: AppTheme.primaryBlue,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text('Book Now', style: AppTextStyles.buttonText),
+                    child: Text('Book Now', style: AppTheme.buttonText),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -805,7 +806,7 @@ IconData _getCategoryIcon(String category) {
                       // Handle view profile
                     },
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.primaryBlue),
+                      side: BorderSide(color: AppTheme.primaryBlue),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -813,8 +814,8 @@ IconData _getCategoryIcon(String category) {
                     ),
                     child: Text(
                       'View Profile',
-                      style: AppTextStyles.buttonText.copyWith(
-                        color: AppColors.primaryBlue,
+                      style: AppTheme.buttonText.copyWith(
+                        color: AppTheme.primaryBlue,
                       ),
                     ),
                   ),
@@ -852,7 +853,7 @@ Widget _buildSimilarServicesSection() {
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
           child: Text(
             'Similar Services',
-            style: AppTextStyles.headlineSmall.copyWith(
+            style: AppTheme.headlineSmall.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -879,7 +880,7 @@ Widget _buildSimilarServicesSection() {
                   width: 160,
                   margin: const EdgeInsets.only(right: 12),
                   decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
+                    color: AppTheme.cardBackground,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -911,7 +912,7 @@ Widget _buildSimilarServicesSection() {
                         padding: const EdgeInsets.all(8),
                         child: Text(
                           offering.title,
-                          style: AppTextStyles.bodyMedium.copyWith(
+                          style: AppTheme.bodyMedium.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
@@ -933,7 +934,7 @@ Widget _buildSimilarServicesSection() {
 
 Widget _buildPlaceholderImage() {
   return Container(
-    color: AppColors.primaryBlue,
+    color: AppTheme.primaryBlue,
     height: 80,
     child: const Center(
       child: Icon(Icons.build, color: Colors.white, size: 40),

@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 import 'package:my_flutter_app/models/OfferingService_dto.dart';
 import 'package:my_flutter_app/pages/add-service_page.dart';
 import 'package:my_flutter_app/pages/offered-services/edit-service.dart';
+import 'package:my_flutter_app/pages/offered-services/test.dart';
 import 'package:my_flutter_app/services/offering_service.dart';
 
 import 'add-service.dart';
@@ -72,7 +74,7 @@ class ServiceCard extends StatelessWidget {
                       Text(
                         service.title,
                         style: AppTextStyles.headlineSmall.copyWith(
-                          color: AppColors.primaryBlue,
+                          color: AppTheme.primaryBlue,
                         ),
                       ),
                       if (service.description.isNotEmpty)
@@ -90,7 +92,7 @@ class ServiceCard extends StatelessWidget {
                 ),
                 Switch(
                   value: service.status == 'true', // Assuming status is a String
-                  activeColor: AppColors.accentGreen,
+                  activeColor: AppTheme.accentGreen,
                   onChanged: onStatusChanged,
                 ),
               ],
@@ -122,7 +124,7 @@ class ServiceCard extends StatelessWidget {
                       child: Text(
                         'EDIT',
                         style: AppTextStyles.buttonText.copyWith(
-                          color: AppColors.primaryBlue,
+                          color: AppTheme.primaryBlue,
                         ),
                       ),
                     ),
@@ -132,7 +134,7 @@ class ServiceCard extends StatelessWidget {
                       child: Text(
                         'DELETE',
                         style: AppTextStyles.buttonText.copyWith(
-                          color: AppColors.accentOrange,
+                          color: AppTheme.accentOrange,
                         ),
                       ),
                     ),
@@ -153,11 +155,11 @@ class ServiceCard extends StatelessWidget {
     switch (service.category) {
       case 'Vehicle':
         icon = Icons.directions_car;
-        color = AppColors.primaryBlue;
+        color = AppTheme.primaryBlue;
         break;
       case 'Home':
         icon = Icons.home;
-        color = AppColors.accentOrange;
+        color = AppTheme.accentOrange;
         break;
       case 'Contract':
         icon = Icons.assignment;
@@ -230,7 +232,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to load services: ${e.toString()}'),
-            backgroundColor: AppColors.accentOrange,
+            backgroundColor: AppTheme.accentOrange,
             action: SnackBarAction(
               label: 'Retry',
               textColor: Colors.white,
@@ -247,15 +249,15 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundGrey,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text('My Services', style: AppTextStyles.headlineLarge),
-        backgroundColor: AppColors.primaryBlue,
+        backgroundColor: AppTheme.primaryBlue,
         foregroundColor: Colors.white,
       ),
       body: RefreshIndicator(
         onRefresh: _loadOfferings,
-        color: AppColors.primaryBlue,
+        color: AppTheme.primaryBlue,
         child: isLoading
             ? _buildLoadingShimmer()
             : services.isEmpty
@@ -264,7 +266,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _handleAddService(context),
-        backgroundColor: AppColors.accentOrange,
+        backgroundColor: AppTheme.accentOrange,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -281,7 +283,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
           child: Container(
             height: 120,
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
+              color: AppTheme.cardColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -303,7 +305,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
                 Icon(
                   Icons.handyman,
                   size: 48,
-                  color: AppColors.dividerColor,
+                  color: AppTheme.dividerColor,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -314,7 +316,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
                 Text(
                   'Pull down to refresh or tap the + button to add your first service',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.dividerColor,
+                    color: AppTheme.dividerColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -350,7 +352,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
     if (isProvider) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const AddServicePage()),
+        MaterialPageRoute(builder: (context) => const OfferingServiceFormScreen()),
       ).then((_) => _loadOfferings());
     } else {
       showDialog(
@@ -377,7 +379,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
               child: Text(
                 'Enable Provider',
                 style: AppTextStyles.buttonText.copyWith(
-                  color: AppColors.accentGreen,
+                  color: AppTheme.accentGreen,
                 ),
               ),
             ),
@@ -391,8 +393,9 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditServicePage(
-          offering: service,
+        builder: (context) => OfferingServiceFormScreen(
+          existingService: service,
+          isEditing: true,
         ),
       ),
     );
@@ -429,7 +432,7 @@ class _ServiceManagementScreenState extends State<ServiceManagementScreen> {
             child: Text(
               'Delete',
               style: AppTextStyles.buttonText.copyWith(
-                color: AppColors.accentOrange,
+                color: AppTheme.accentOrange,
               ),
             ),
           ),

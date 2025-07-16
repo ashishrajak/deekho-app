@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
+import 'package:my_flutter_app/models/OfferingService_dto.dart';
 import 'package:my_flutter_app/pages/StoreDetailPage.dart';
 
 
 class ViewDealPage extends StatefulWidget {
-  final Deal deal;
+  final OfferingServiceDTO offering;
 
-  const ViewDealPage({Key? key, required this.deal}) : super(key: key);
+  const ViewDealPage({Key? key, required this.offering}) : super(key: key);
 
   @override
   _ViewDealPageState createState() => _ViewDealPageState();
@@ -21,15 +23,15 @@ class _ViewDealPageState extends State<ViewDealPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppTheme.backgroundColor,
       body: CustomScrollView(
         slivers: [
           _buildSliverAppBar(),
           SliverToBoxAdapter(
             child: Column(
               children: [
-                _buildDealInfo(),
-                _buildProductSection(),
+                _buildOfferingInfo(),
+                _buildServiceSection(),
                 _buildVendorInfo(),
                 _buildRatingsSection(),
                 _buildSimilarOffers(),
@@ -48,29 +50,31 @@ class _ViewDealPageState extends State<ViewDealPage> {
     return SliverAppBar(
       expandedHeight: 300,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.cardColor,
       leading: Container(
-        margin: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(AppTheme.spacingS),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: AppTheme.cardColor.withOpacity(0.9),
           shape: BoxShape.circle,
+          boxShadow: const [AppTheme.cardShadow],
         ),
         child: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E293B)),
+          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       actions: [
         Container(
-          margin: const EdgeInsets.all(8),
+          margin: const EdgeInsets.all(AppTheme.spacingS),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
+            color: AppTheme.cardColor.withOpacity(0.9),
             shape: BoxShape.circle,
+            boxShadow: const [AppTheme.cardShadow],
           ),
           child: IconButton(
             icon: Icon(
               _isWishlisted ? Icons.favorite : Icons.favorite_border,
-              color: _isWishlisted ? const Color(0xFFEF4444) : const Color(0xFF64748B),
+              color: _isWishlisted ? AppTheme.accentColor : AppTheme.textSecondary,
             ),
             onPressed: () {
               setState(() {
@@ -80,13 +84,14 @@ class _ViewDealPageState extends State<ViewDealPage> {
           ),
         ),
         Container(
-          margin: const EdgeInsets.all(8),
+          margin: const EdgeInsets.all(AppTheme.spacingS),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
+            color: AppTheme.cardColor.withOpacity(0.9),
             shape: BoxShape.circle,
+            boxShadow: const [AppTheme.cardShadow],
           ),
           child: IconButton(
-            icon: const Icon(Icons.share, color: Color(0xFF64748B)),
+            icon: Icon(Icons.share, color: AppTheme.textSecondary),
             onPressed: () {
               // Share functionality
             },
@@ -103,56 +108,58 @@ class _ViewDealPageState extends State<ViewDealPage> {
                   _currentImageIndex = index;
                 });
               },
-              itemCount: widget.deal.images?.length ?? 1,
+              itemCount: widget.offering.mediaItems.length > 0 ? widget.offering.mediaItems.length : 1,
               itemBuilder: (context, index) {
                 return Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.grey[300]!, Colors.grey[100]!],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                  decoration: const BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
                   ),
-                  child: const Icon(
-                    Icons.image,
-                    size: 64,
-                    color: Colors.grey,
-                  ),
+                  child: widget.offering.mediaItems.isNotEmpty
+                      ? Image.network(
+                          widget.offering.mediaItems[index].mediaUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => 
+                              const Icon(Icons.image, size: 64, color: Colors.white),
+                        )
+                      : const Icon(Icons.image, size: 64, color: Colors.white),
                 );
               },
             ),
             // Discount badge
-            Positioned(
-              top: 60,
-              left: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEF4444),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${widget.deal.discountPercentage}% OFF',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+            if (widget.offering.primaryPricing.discount != null)
+              Positioned(
+                top: 60,
+                left: AppTheme.spacingM,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacingM,
+                    vertical: AppTheme.spacingS,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.offerGradient,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                  ),
+                  child: Text(
+                    '${widget.offering.primaryPricing.discount} OFF',
+                    style: AppTheme.bodySmall.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
             // Image indicators
-            if ((widget.deal.images?.length ?? 0) > 1)
+            if (widget.offering.mediaItems.length > 1)
               Positioned(
-                bottom: 16,
+                bottom: AppTheme.spacingM,
                 left: 0,
                 right: 0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    widget.deal.images?.length ?? 1,
+                    widget.offering.mediaItems.length,
                     (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingXS),
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
@@ -171,93 +178,98 @@ class _ViewDealPageState extends State<ViewDealPage> {
     );
   }
 
-  Widget _buildDealInfo() {
+  Widget _buildOfferingInfo() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: const [AppTheme.elevatedShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.deal.title,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
-            ),
+            widget.offering.title,
+            style: AppTheme.headlineLarge,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppTheme.spacingS),
           Text(
-            widget.deal.description,
-            style: const TextStyle(
-              color: Color(0xFF64748B),
-              fontSize: 16,
+            widget.offering.description,
+            style: AppTheme.bodyMedium.copyWith(
+              color: AppTheme.textSecondary,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           Row(
             children: [
               Text(
-                '₹${widget.deal.originalPrice}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF64748B),
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '₹${widget.deal.discountedPrice}',
-                style: const TextStyle(
+                '₹${widget.offering.primaryPricing.basePrice.amount}',
+                style: AppTheme.headlineLarge.copyWith(
+                  color: AppTheme.secondaryColor,
                   fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF059669),
                 ),
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF059669).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'Save ₹${widget.deal.originalPrice - widget.deal.discountedPrice}',
-                  style: const TextStyle(
-                    color: Color(0xFF059669),
-                    fontWeight: FontWeight.w600,
+              const SizedBox(width: AppTheme.spacingS),
+              if (widget.offering.primaryPricing.discount != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacingM,
+                    vertical: AppTheme.spacingS,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.secondaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'Save ${widget.offering.primaryPricing.discount}',
+                    style: AppTheme.bodySmall.copyWith(
+                      color: AppTheme.secondaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
-          const SizedBox(height: 16),
-          _buildDealDetails(),
+          const SizedBox(height: AppTheme.spacingM),
+          _buildOfferingDetails(),
         ],
       ),
     );
   }
 
-  Widget _buildDealDetails() {
+  Widget _buildOfferingDetails() {
     return Column(
       children: [
-        _buildDetailRow(Icons.access_time, 'Valid until', widget.deal.validUntil ?? 'Limited time'),
-        const SizedBox(height: 8),
-        _buildDetailRow(Icons.inventory, 'Available', '${widget.deal.stock ?? 'Limited'} items left'),
-        const SizedBox(height: 8),
-        _buildDetailRow(Icons.location_on, 'Distance', '${widget.deal.distance} km away'),
+        if (widget.offering.timing.durationMinutes != null)
+          _buildDetailRow(
+            Icons.access_time,
+            'Duration',
+            '${widget.offering.timing.durationMinutes} minutes',
+          ),
+        const SizedBox(height: AppTheme.spacingS),
+        _buildDetailRow(
+          Icons.verified,
+          'Status',
+          widget.offering.verified ? 'Verified' : 'Not Verified',
+        ),
+        const SizedBox(height: AppTheme.spacingS),
+        if (widget.offering.geography.serviceArea != null)
+          _buildDetailRow(
+            Icons.location_on,
+            'Service Area',
+            widget.offering.geography.serviceArea!,
+          ),
+        if (widget.offering.timing.emergencyService)
+          const SizedBox(height: AppTheme.spacingS),
+        if (widget.offering.timing.emergencyService)
+          _buildDetailRow(
+            Icons.emergency,
+            'Emergency Service',
+            'Available 24/7',
+          ),
       ],
     );
   }
@@ -265,156 +277,136 @@ class _ViewDealPageState extends State<ViewDealPage> {
   Widget _buildDetailRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: const Color(0xFF64748B)),
-        const SizedBox(width: 8),
+        Icon(icon, size: 16, color: AppTheme.textSecondary),
+        const SizedBox(width: AppTheme.spacingS),
         Text(
           '$label: ',
-          style: const TextStyle(
-            color: Color(0xFF64748B),
-            fontSize: 14,
+          style: AppTheme.bodySmall.copyWith(
+            color: AppTheme.textSecondary,
           ),
         ),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Color(0xFF1E293B),
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+        Expanded(
+          child: Text(
+            value,
+            style: AppTheme.bodySmall.copyWith(
+              color: AppTheme.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildProductSection() {
+  Widget _buildServiceSection() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: const [AppTheme.elevatedShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Products Included',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
-            ),
+          Text(
+            'Service Details',
+            style: AppTheme.headlineMedium,
           ),
-          const SizedBox(height: 16),
-          // This would dynamically show single product, multiple products, or combo
-          _buildProductList(),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
+          _buildServiceDetails(),
+          const SizedBox(height: AppTheme.spacingM),
           _buildQuantitySelector(),
         ],
       ),
     );
   }
 
-  Widget _buildProductList() {
-    // Mock products for demonstration
-    final products = widget.deal.products ?? [
-      Product(name: 'Premium Burger', originalPrice: 299, discountedPrice: 199),
-      Product(name: 'French Fries', originalPrice: 99, discountedPrice: 49),
-    ];
-
+  Widget _buildServiceDetails() {
     return Column(
-      children: products.map((product) => _buildProductItem(product)).toList(),
-    );
-  }
-
-  Widget _buildProductItem(Product product) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFE2E8F0),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppTheme.spacingM),
+          decoration: BoxDecoration(
+            color: AppTheme.backgroundColor,
+            borderRadius: BorderRadius.circular(AppTheme.radiusM),
+            border: Border.all(
+              color: AppTheme.borderColor,
+              width: 1,
             ),
-            child: const Icon(Icons.fastfood, color: Colors.grey),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Category: ${widget.offering.category}',
+                style: AppTheme.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: AppTheme.spacingS),
+              Text(
+                'Pricing Type: ${widget.offering.primaryPricing.type.toString().split('.').last}',
+                style: AppTheme.bodyMedium,
+              ),
+              const SizedBox(height: AppTheme.spacingS),
+              if (widget.offering.timing.availableDays.isNotEmpty)
                 Text(
-                  product.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1E293B),
-                  ),
+                  'Available Days: ${widget.offering.timing.availableDays.join(', ')}',
+                  style: AppTheme.bodyMedium,
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      '₹${product.originalPrice}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '₹${product.discountedPrice}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF059669),
-                      ),
-                    ),
-                  ],
+              if (widget.offering.timing.startTime != null && widget.offering.timing.endTime != null)
+                const SizedBox(height: AppTheme.spacingS),
+              if (widget.offering.timing.startTime != null && widget.offering.timing.endTime != null)
+                Text(
+                  'Hours: ${widget.offering.timing.startTime} - ${widget.offering.timing.endTime}',
+                  style: AppTheme.bodyMedium,
                 ),
-              ],
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        if (widget.offering.tags.isNotEmpty)
+          const SizedBox(height: AppTheme.spacingM),
+        if (widget.offering.tags.isNotEmpty)
+          Wrap(
+            spacing: AppTheme.spacingS,
+            runSpacing: AppTheme.spacingS,
+            children: widget.offering.tags.map((tag) => Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppTheme.spacingM,
+                vertical: AppTheme.spacingS,
+              ),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(AppTheme.radiusS),
+              ),
+              child: Text(
+                tag,
+                style: AppTheme.bodySmall.copyWith(
+                  color: AppTheme.primaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )).toList(),
+          ),
+      ],
     );
   }
 
   Widget _buildQuantitySelector() {
     return Row(
       children: [
-        const Text(
+        Text(
           'Quantity:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1E293B),
-          ),
+          style: AppTheme.headlineSmall,
         ),
         const Spacer(),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppTheme.borderColor),
+            borderRadius: BorderRadius.circular(AppTheme.radiusS),
           ),
           child: Row(
             children: [
@@ -428,13 +420,13 @@ class _ViewDealPageState extends State<ViewDealPage> {
                 iconSize: 20,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.spacingM,
+                  vertical: AppTheme.spacingS,
+                ),
                 child: Text(
                   '$_selectedQuantity',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTheme.headlineSmall,
                 ),
               ),
               IconButton(
@@ -455,18 +447,12 @@ class _ViewDealPageState extends State<ViewDealPage> {
 
   Widget _buildVendorInfo() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: const [AppTheme.elevatedShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -477,38 +463,33 @@ class _ViewDealPageState extends State<ViewDealPage> {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF3B82F6).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.store,
                   size: 30,
-                  color: Color(0xFF3B82F6),
+                  color: AppTheme.primaryColor,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppTheme.spacingM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.deal.vendorName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E293B),
-                      ),
+                      'Service Provider',
+                      style: AppTheme.headlineMedium,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppTheme.spacingXS),
                     Row(
                       children: [
                         Icon(Icons.star, size: 16, color: Colors.amber[600]),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: AppTheme.spacingXS),
                         Text(
                           '4.5 (120 reviews)',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
+                          style: AppTheme.bodySmall.copyWith(
+                            color: AppTheme.textSecondary,
                           ),
                         ),
                       ],
@@ -521,19 +502,21 @@ class _ViewDealPageState extends State<ViewDealPage> {
                   // Navigate to vendor profile
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFF3B82F6)),
+                  side: BorderSide(color: AppTheme.primaryColor),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusS),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'View Store',
-                  style: TextStyle(color: Color(0xFF3B82F6)),
+                  style: AppTheme.bodySmall.copyWith(
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           _buildVendorDetails(),
         ],
       ),
@@ -543,53 +526,51 @@ class _ViewDealPageState extends State<ViewDealPage> {
   Widget _buildVendorDetails() {
     return Column(
       children: [
-        _buildDetailRow(Icons.location_on, 'Address', widget.deal.vendorAddress ?? 'MG Road, Bhopal'),
-        const SizedBox(height: 8),
+        if (widget.offering.geography.serviceArea != null)
+          _buildDetailRow(
+            Icons.location_on,
+            'Service Area',
+            widget.offering.geography.serviceArea!,
+          ),
+        const SizedBox(height: AppTheme.spacingS),
         _buildDetailRow(Icons.phone, 'Contact', '+91 98765 43210'),
-        const SizedBox(height: 8),
-        _buildDetailRow(Icons.access_time, 'Hours', 'Open until 10:00 PM'),
+        const SizedBox(height: AppTheme.spacingS),
+        if (widget.offering.timing.startTime != null && widget.offering.timing.endTime != null)
+          _buildDetailRow(
+            Icons.access_time,
+            'Hours',
+            '${widget.offering.timing.startTime} - ${widget.offering.timing.endTime}',
+          ),
       ],
     );
   }
 
   Widget _buildRatingsSection() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
+      padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: const [AppTheme.elevatedShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Reviews & Ratings',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
-            ),
+            style: AppTheme.headlineMedium,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           Row(
             children: [
-              const Text(
+              Text(
                 '4.5',
-                style: TextStyle(
+                style: AppTheme.headlineLarge.copyWith(
                   fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E293B),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppTheme.spacingM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -601,12 +582,11 @@ class _ViewDealPageState extends State<ViewDealPage> {
                         color: index < 4 ? Colors.amber[600] : Colors.grey[300],
                       )),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
+                    const SizedBox(height: AppTheme.spacingXS),
+                    Text(
                       'Based on 120 reviews',
-                      style: TextStyle(
-                        color: Color(0xFF64748B),
-                        fontSize: 14,
+                      style: AppTheme.bodySmall.copyWith(
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ],
@@ -614,12 +594,17 @@ class _ViewDealPageState extends State<ViewDealPage> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           TextButton(
             onPressed: () {
               // Show all reviews
             },
-            child: const Text('View all reviews'),
+            child: Text(
+              'View all reviews',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppTheme.primaryColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -628,19 +613,15 @@ class _ViewDealPageState extends State<ViewDealPage> {
 
   Widget _buildSimilarOffers() {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(AppTheme.spacingM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Similar Offers',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
-            ),
+            style: AppTheme.headlineLarge,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           SizedBox(
             height: 200,
             child: ListView.builder(
@@ -657,17 +638,11 @@ class _ViewDealPageState extends State<ViewDealPage> {
   Widget _buildSimilarOfferCard() {
     return Container(
       width: 280,
-      margin: const EdgeInsets.only(right: 16),
+      margin: const EdgeInsets.only(right: AppTheme.spacingM),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        borderRadius: BorderRadius.circular(AppTheme.radiusM),
+        boxShadow: const [AppTheme.cardShadow],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -675,59 +650,55 @@ class _ViewDealPageState extends State<ViewDealPage> {
           Container(
             height: 120,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.grey[300]!, Colors.grey[100]!],
-              ),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(AppTheme.radiusM)),
             ),
             child: const Center(
-              child: Icon(Icons.image, size: 40, color: Colors.grey),
+              child: Icon(Icons.image, size: 40, color: Colors.white),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(AppTheme.spacingM),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Similar Deal Title',
-                  style: TextStyle(
+                  style: AppTheme.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1E293B),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppTheme.spacingXS),
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       '₹299',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
+                      style: AppTheme.bodySmall.copyWith(
+                        color: AppTheme.textSecondary,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
+                    const SizedBox(width: AppTheme.spacingS),
+                    Text(
                       '₹199',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF059669),
+                      style: AppTheme.headlineSmall.copyWith(
+                        color: AppTheme.secondaryColor,
                       ),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444),
-                        borderRadius: BorderRadius.circular(4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppTheme.spacingS,
+                        vertical: 2,
                       ),
-                      child: const Text(
+                      decoration: BoxDecoration(
+                        color: AppTheme.accentColor,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusXS),
+                      ),
+                      child: Text(
                         '33% OFF',
-                        style: TextStyle(
+                        style: AppTheme.caption.copyWith(
                           color: Colors.white,
-                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -744,19 +715,15 @@ class _ViewDealPageState extends State<ViewDealPage> {
 
   Widget _buildSimilarVendors() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Similar Vendors',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
-            ),
+            style: AppTheme.headlineLarge,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppTheme.spacingM),
           SizedBox(
             height: 120,
             child: ListView.builder(
@@ -770,87 +737,69 @@ class _ViewDealPageState extends State<ViewDealPage> {
     );
   }
 
-
-Widget _buildSimilarVendorCard( ) {
-  return GestureDetector(
-    onTap: () {
-      // Navigate to the store detail page
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => StoreDetailPage(
-            store: MockStoreService.getStoreDetails(),
+  Widget _buildSimilarVendorCard() {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the store detail page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoreDetailPage(
+              store: MockStoreService.getStoreDetails(),
+            ),
           ),
+        );
+      },
+      child: Container(
+        width: 100,
+        margin: const EdgeInsets.only(right: AppTheme.spacingM),
+        decoration: BoxDecoration(
+          color: AppTheme.cardColor,
+          borderRadius: BorderRadius.circular(AppTheme.radiusM),
+          boxShadow: const [AppTheme.cardShadow],
         ),
-      );
-    },
-    child: Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Icon(
+                Icons.store,
+                size: 24,
+                color: AppTheme.primaryColor,
+              ),
+            ),
+            const SizedBox(height: AppTheme.spacingS),
+            Text(
+              'Store Name',
+              style: AppTheme.bodySmall.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '2.5 km',
+              style: AppTheme.caption.copyWith(
+                color: AppTheme.textSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xFF3B82F6).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: const Icon(
-              Icons.store,
-              size: 24,
-              color: Color(0xFF3B82F6),
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Store Name',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Text(
-            '2.5 km',
-            style: TextStyle(
-              fontSize: 10,
-              color: Color(0xFF64748B),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   Widget _buildBottomActionBar() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppTheme.spacingM),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
+        color: AppTheme.cardColor,
+        boxShadow: const [AppTheme.elevatedShadow],
       ),
       child: SafeArea(
         child: Row(
@@ -863,38 +812,40 @@ Widget _buildSimilarVendorCard( ) {
               },
               icon: Icon(
                 _isWishlisted ? Icons.favorite : Icons.favorite_border,
-                color: _isWishlisted ? const Color(0xFFEF4444) : const Color(0xFF64748B),
+                color: _isWishlisted ? AppTheme.accentColor : AppTheme.textSecondary,
               ),
               label: const Text('Wishlist'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF64748B),
-                side: const BorderSide(color: Color(0xFFE2E8F0)),
+                foregroundColor: AppTheme.textSecondary,
+                side: BorderSide(color: AppTheme.borderColor),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.spacingM,
+                  vertical: AppTheme.spacingM,
+                ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppTheme.spacingM),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
                   _showOrderConfirmation();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF3B82F6),
+                  backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
                   ),
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: AppTheme.spacingM),
                 ),
                 child: Text(
-                  'Order Now - ₹${widget.deal.discountedPrice * _selectedQuantity}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  'Order Now - ₹${(widget.offering.primaryPricing.basePrice.amount * _selectedQuantity).toStringAsFixed(0)}',
+                  style: AppTheme.headlineSmall.copyWith(
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -905,119 +856,277 @@ Widget _buildSimilarVendorCard( ) {
     );
   }
 
-  void _showOrderConfirmation() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        maxChildSize: 0.9,
-        minChildSize: 0.5,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Confirm Your Order',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E293B),
-                ),
+
+void _showOrderConfirmation() {
+  // Calculate the total price using basePrice from the DTO
+  final double unitPrice = widget.offering.primaryPricing.basePrice.amount;
+  final double totalPrice = unitPrice * _selectedQuantity;
+  final String currency = widget.offering.primaryPricing.basePrice.currency;
+  
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppTheme.radiusL)),
+    ),
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      maxChildSize: 0.9,
+      minChildSize: 0.5,
+      builder: (context, scrollController) => Container(
+        padding: const EdgeInsets.all(AppTheme.spacingL),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Text(
+              'Confirm Your Order',
+              style: AppTheme.headlineLarge,
+            ),
+            const SizedBox(height: AppTheme.spacingL),
+            
+            // Order Summary Card
+            Container(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              decoration: BoxDecoration(
+                color: AppTheme.cardColor,
+                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                boxShadow: const [AppTheme.cardShadow],
               ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF8FAFC),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.deal.title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.offering.title,
+                    style: AppTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: AppTheme.spacingS),
+                  
+                  // Service description
+                  Text(
+                    widget.offering.description,
+                    style: AppTheme.bodySmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: AppTheme.spacingM),
+                  
+                  // Quantity
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Quantity:',
+                        style: AppTheme.bodyMedium,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text('Quantity: $_selectedQuantity'),
-                    const SizedBox(height: 8),
+                      Text(
+                        '$_selectedQuantity',
+                        style: AppTheme.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppTheme.spacingS),
+                  
+                  // Unit price
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Unit Price:',
+                        style: AppTheme.bodyMedium,
+                      ),
+                      Text(
+                        '$currency ${unitPrice.toStringAsFixed(2)}',
+                        style: AppTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                  
+                  // Show discount if available
+                  if (widget.offering.primaryPricing.discount != null && 
+                      widget.offering.primaryPricing.discount!.isNotEmpty) ...[
+                    const SizedBox(height: AppTheme.spacingS),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Total:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Text(
+                          'Discount:',
+                          style: AppTheme.bodyMedium,
                         ),
                         Text(
-                          '₹${widget.deal.discountedPrice * _selectedQuantity}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF059669),
+                          widget.offering.primaryPricing.discount!,
+                          style: AppTheme.bodyMedium.copyWith(
+                            color: AppTheme.secondaryColor,
                           ),
                         ),
                       ],
                     ),
                   ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Delivery Information',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text('📍 Deliver to: MG Road, Bhopal'),
-              const Text('🕒 Estimated time: 30-45 minutes'),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Order placed successfully!'),
-                        backgroundColor: Color(0xFF059669),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3B82F6),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  
+                  const SizedBox(height: AppTheme.spacingM),
+                  Container(
+                    height: 1,
+                    color: AppTheme.borderColor,
                   ),
-                  child: const Text(
-                    'Confirm Order',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  const SizedBox(height: AppTheme.spacingM),
+                  
+                  // Total
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total:',
+                        style: AppTheme.headlineMedium,
+                      ),
+                      Text(
+                        '$currency ${totalPrice.toStringAsFixed(2)}',
+                        style: AppTheme.headlineMedium.copyWith(
+                          color: AppTheme.secondaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: AppTheme.spacingL),
+            
+            // Service Details
+            Text(
+              'Service Information',
+              style: AppTheme.headlineMedium,
+            ),
+            const SizedBox(height: AppTheme.spacingM),
+            
+            // Service area
+            if (widget.offering.geography.serviceArea != null) ...[
+              Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    size: 16,
+                    color: AppTheme.textSecondary,
+                  ),
+                  const SizedBox(width: AppTheme.spacingS),
+                  Text(
+                    'Service Area: ${widget.offering.geography.serviceArea}',
+                    style: AppTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppTheme.spacingS),
+            ],
+            
+            // Timing information
+            if (widget.offering.timing.durationMinutes != null) ...[
+              Row(
+                children: [
+                  const Icon(
+                    Icons.access_time,
+                    size: 16,
+                    color: AppTheme.textSecondary,
+                  ),
+                  const SizedBox(width: AppTheme.spacingS),
+                  Text(
+                    'Duration: ${widget.offering.timing.durationMinutes} minutes',
+                    style: AppTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppTheme.spacingS),
+            ],
+            
+            // Available days
+            if (widget.offering.timing.availableDays.isNotEmpty) ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.calendar_today,
+                    size: 16,
+                    color: AppTheme.textSecondary,
+                  ),
+                  const SizedBox(width: AppTheme.spacingS),
+                  Expanded(
+                    child: Text(
+                      'Available: ${widget.offering.timing.availableDays.join(', ')}',
+                      style: AppTheme.bodyMedium,
                     ),
+                  ),
+                ],
+              ),
+            ],
+            
+            // Emergency service badge
+            if (widget.offering.timing.emergencyService) ...[
+              const SizedBox(height: AppTheme.spacingS),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.spacingS,
+                  vertical: AppTheme.spacingXS,
+                ),
+                decoration: BoxDecoration(
+                  color: AppTheme.accentColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                ),
+                child: Text(
+                  '🚨 Emergency Service Available',
+                  style: AppTheme.bodySmall.copyWith(
+                    color: AppTheme.accentColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
-          ),
+            
+            const Spacer(),
+            
+            // Confirm Button
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                boxShadow: const [AppTheme.elevatedShadow],
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Order placed successfully!'),
+                      backgroundColor: AppTheme.secondaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: AppTheme.spacingM),
+                ),
+                child: Text(
+                  'Confirm Order',
+                  style: AppTheme.headlineSmall.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }
-
+}

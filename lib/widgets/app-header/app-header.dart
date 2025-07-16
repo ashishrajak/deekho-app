@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 
 class AppHeader extends StatelessWidget {
@@ -7,7 +8,7 @@ class AppHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backgroundColor, // Use your color here
+      color: AppTheme.backgroundColor, // Use your color here
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
@@ -20,19 +21,19 @@ class AppHeader extends StatelessWidget {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: "Search for services, products...",
-                      hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textLight),
-                      prefixIcon: Icon(Icons.search, color: AppColors.textLight),
+                      hintStyle: AppTheme.bodyMedium.copyWith(color: AppTheme.textLight),
+                      prefixIcon: Icon(Icons.search, color: AppTheme.textLight),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: AppColors.dividerColor),
+                        borderSide: BorderSide(color: AppTheme.dividerColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: AppColors.dividerColor),
+                        borderSide: BorderSide(color: AppTheme.dividerColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: AppColors.primaryBlue),
+                        borderSide: BorderSide(color: AppTheme.primaryBlue),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     ),
@@ -41,7 +42,7 @@ class AppHeader extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               IconButton(
-                icon: Icon(Icons.notifications_none, color: AppColors.primaryBlue),
+                icon: Icon(Icons.notifications_none, color: AppTheme.primaryBlue),
                 onPressed: () {},
               ),
             ],
@@ -59,9 +60,9 @@ class AppHeader extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.backgroundColor,
+        color: AppTheme.backgroundColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.dividerColor),
+        border: Border.all(color: AppTheme.dividerColor),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
@@ -72,7 +73,7 @@ class AppHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(label, style: AppTextStyles.bodyMedium),
+          Text(label, style: AppTheme.bodyMedium),
           const Icon(Icons.keyboard_arrow_down, size: 18),
         ],
       ),

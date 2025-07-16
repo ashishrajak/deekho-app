@@ -6,6 +6,7 @@ import 'package:my_flutter_app/models/OfferingService_dto.dart';
 
 class OfferingService {
   final http.Client client;
+  final String baseUrl = Env.baseUrl+ '/user';
 
   OfferingService({http.Client? client}) : client = client ?? http.Client();
 
@@ -28,7 +29,7 @@ class OfferingService {
       };
 
       // Manually build URI with repeated parameters for `categories`
-      final uri = Uri.parse('${Env.baseUrl}/offerings/filter');
+      final uri = Uri.parse('${baseUrl}/offerings/filter');
       final uriWithQuery = Uri(
         scheme: uri.scheme,
         host: uri.host,
@@ -83,7 +84,7 @@ class OfferingService {
 
   Future<OfferingServiceDTO> saveOfferingService(OfferingServiceDTO dto) async {
     try {
-      final uri = Uri.parse('${Env.baseUrl}/offerings');
+      final uri = Uri.parse('${baseUrl}/offerings');
 
       final response = await client.post(
         uri,
@@ -117,7 +118,7 @@ class OfferingService {
   // Method to update existing offering service
   Future<OfferingServiceDTO> updateOfferingService(String id, OfferingServiceDTO dto) async {
     try {
-      final uri = Uri.parse('${Env.baseUrl}/offerings/$id');
+      final uri = Uri.parse('${baseUrl}/offerings/$id');
 
       final response = await client.put(
         uri,
@@ -154,7 +155,7 @@ class OfferingService {
 
   Future<void> deleteOfferingService(String id) async {
     try {
-      final uri = Uri.parse('${Env.baseUrl}/offerings/$id');
+      final uri = Uri.parse('${baseUrl}/offerings/$id');
 
       final response = await client.delete(
         uri,
@@ -187,7 +188,7 @@ class OfferingService {
 
   Future<List<String>> uploadMedia(String offerId, List<File> mediaFiles) async {
     try {
-      final uri = Uri.parse('${Env.baseUrl}/media/upload');
+      final uri = Uri.parse('${baseUrl}/media/upload');
 
       // Create multipart request
       final request = http.MultipartRequest('POST', uri);

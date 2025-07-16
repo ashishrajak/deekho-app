@@ -1,6 +1,7 @@
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 
 
@@ -63,13 +64,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        title: Text('My Orders', style: AppTextStyles.headlineSmall),
-        backgroundColor: AppColors.cardBackground,
+        title: Text('My Orders', style: AppTheme.headlineSmall),
+        backgroundColor: AppTheme.cardBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textDark),
+          icon: const Icon(Icons.arrow_back_ios, color: AppTheme.textDark),
           onPressed: () => Navigator.pop(context),
         ),
         bottom: TabBar(
@@ -80,9 +81,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
             Tab(text: 'Shipped'),
             Tab(text: 'Delivered'),
           ],
-          labelColor: AppColors.primaryBlue,
-          unselectedLabelColor: AppColors.textMedium,
-          indicatorColor: AppColors.primaryBlue,
+          labelColor: AppTheme.primaryBlue,
+          unselectedLabelColor: AppTheme.textMedium,
+          indicatorColor: AppTheme.primaryBlue,
         ),
       ),
       body: TabBarView(
@@ -118,7 +119,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -134,7 +135,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Order #${order.orderId}', style: AppTextStyles.bodyLarge),
+              Text('Order #${order.orderId}', style: AppTheme.bodyLarge),
               _buildStatusChip(order.status),
             ],
           ),
@@ -146,8 +147,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
                 child: Container(
                   width: 60,
                   height: 60,
-                  color: AppColors.backgroundGrey,
-                  child: Icon(Icons.shopping_bag, color: AppColors.primaryBlue),
+                  color: AppTheme.backgroundColor,
+                  child: Icon(Icons.shopping_bag, color: AppTheme.primaryBlue),
                 ),
               ),
               const SizedBox(width: 12),
@@ -155,10 +156,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(order.productName, style: AppTextStyles.bodyMedium),
-                    Text('Qty: ${order.quantity}', style: AppTextStyles.bodySmall),
+                    Text(order.productName, style: AppTheme.bodyMedium),
+                    Text('Qty: ${order.quantity}', style: AppTheme.bodySmall),
                     Text('₹${order.totalAmount.toStringAsFixed(2)}', 
-                         style: AppTextStyles.bodyLarge.copyWith(color: AppColors.primaryBlue)),
+                         style: AppTheme.bodyLarge.copyWith(color: AppTheme.primaryBlue)),
                   ],
                 ),
               ),
@@ -169,7 +170,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Ordered on ${_formatDate(order.orderDate)}', 
-                   style: AppTextStyles.bodySmall.copyWith(color: AppColors.textMedium)),
+                   style: AppTheme.bodySmall.copyWith(color: AppTheme.textMedium)),
               Row(
                 children: [
                   TextButton(
@@ -196,23 +197,23 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
     
     switch (status) {
       case OrderStatus.pending:
-        color = AppColors.accentOrange;
+        color = AppTheme.accentOrange;
         text = 'Pending';
         break;
       case OrderStatus.shipped:
-        color = AppColors.primaryBlue;
+        color = AppTheme.primaryBlue;
         text = 'Shipped';
         break;
       case OrderStatus.delivered:
-        color = AppColors.successColor;
+        color = AppTheme.successColor;
         text = 'Delivered';
         break;
       case OrderStatus.cancelled:
-        color = AppColors.errorColor;
+        color = AppTheme.errorColor;
         text = 'Cancelled';
         break;
       default:
-        color = AppColors.textMedium;
+        color = AppTheme.textMedium;
         text = 'Unknown';
     }
 
@@ -222,7 +223,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(text, style: AppTextStyles.bodySmall.copyWith(color: color)),
+      child: Text(text, style: AppTheme.bodySmall.copyWith(color: color)),
     );
   }
 
@@ -231,12 +232,12 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> with TickerProviderStat
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_bag_outlined, size: 64, color: AppColors.textLight),
+          Icon(Icons.shopping_bag_outlined, size: 64, color: AppTheme.textLight),
           const SizedBox(height: 16),
-          Text('No orders found', style: AppTextStyles.headlineSmall),
+          Text('No orders found', style: AppTheme.headlineSmall),
           const SizedBox(height: 8),
           Text('Start shopping to see your orders here', 
-               style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMedium)),
+               style: AppTheme.bodyMedium.copyWith(color: AppTheme.textMedium)),
         ],
       ),
     );
@@ -309,19 +310,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        title: Text('Favorites', style: AppTextStyles.headlineSmall),
-        backgroundColor: AppColors.cardBackground,
+        title: Text('Favorites', style: AppTheme.headlineSmall),
+        backgroundColor: AppTheme.cardBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.textDark),
+          icon: const Icon(Icons.arrow_back_ios, color: AppTheme.textDark),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           if (favorites.isNotEmpty)
             IconButton(
-              icon: const Icon(Icons.clear_all, color: AppColors.textDark),
+              icon: const Icon(Icons.clear_all, color: AppTheme.textDark),
               onPressed: _clearAllFavorites,
             ),
         ],
@@ -360,7 +361,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       onTap: () => _viewProductDetails(favorite),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: AppTheme.cardBackground,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -380,7 +381,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: AppColors.backgroundGrey,
+                      color: AppTheme.backgroundColor,
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                     ),
                     child: favorite.productImage.isNotEmpty
@@ -410,7 +411,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         ),
                         child: const Icon(
                           Icons.favorite,
-                          color: AppColors.errorColor,
+                          color: AppTheme.errorColor,
                           size: 20,
                         ),
                       ),
@@ -423,12 +424,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppColors.errorColor,
+                          color: AppTheme.errorColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           favorite.discountBadge!,
-                          style: AppTextStyles.bodySmall.copyWith(color: Colors.white),
+                          style: AppTheme.bodySmall.copyWith(color: Colors.white),
                         ),
                       ),
                     ),
@@ -444,7 +445,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   children: [
                     Text(
                       favorite.productName,
-                      style: AppTextStyles.bodyMedium,
+                      style: AppTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -452,7 +453,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       const SizedBox(height: 4),
                       Text(
                         favorite.brandName!,
-                        style: AppTextStyles.caption.copyWith(color: AppColors.primaryBlue),
+                        style: AppTheme.caption.copyWith(color: AppTheme.primaryBlue),
                       ),
                     ],
                     const Spacer(),
@@ -465,15 +466,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             if (favorite.originalPrice != null)
                               Text(
                                 '₹${favorite.originalPrice!.toStringAsFixed(2)}',
-                                style: AppTextStyles.caption.copyWith(
+                                style: AppTheme.caption.copyWith(
                                   decoration: TextDecoration.lineThrough,
-                                  color: AppColors.textLight,
+                                  color: AppTheme.textLight,
                                 ),
                               ),
                             Text(
                               '₹${favorite.price.toStringAsFixed(2)}',
-                              style: AppTextStyles.bodyLarge.copyWith(
-                                color: AppColors.primaryBlue,
+                              style: AppTheme.bodyLarge.copyWith(
+                                color: AppTheme.primaryBlue,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -484,7 +485,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryBlue,
+                              color: AppTheme.primaryBlue,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Icon(
@@ -511,7 +512,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       child: Icon(
         Icons.shopping_bag,
         size: 48,
-        color: AppColors.primaryBlue.withOpacity(0.5),
+        color: AppTheme.primaryBlue.withOpacity(0.5),
     ));
   }
 
@@ -529,14 +530,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             const SizedBox(height: 24),
             Text(
               'Your Favorite List is Empty',
-              style: AppTextStyles.headlineSmall,
+              style: AppTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 48),
               child: Text(
                 'Items you favorite appear here. Start exploring our best deals!',
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMedium),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.textMedium),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -556,7 +557,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryBlue,
+                backgroundColor: AppTheme.primaryBlue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -564,7 +565,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ),
               child: Text(
                 'Start Shopping',
-                style: AppTextStyles.buttonText,
+                style: AppTheme.buttonText,
               ),
             ),
           ],
@@ -579,12 +580,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: AppTheme.cardBackground,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.primaryBlue.withOpacity(0.3))),
+          border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.3))),
         child: Text(
           text,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.primaryBlue),
+          style: AppTheme.bodySmall.copyWith(color: AppTheme.primaryBlue),
         ),
       ),
     );
@@ -601,28 +602,28 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               icon: Icons.shopping_bag,
               value: '₹${_calculateTotalValue().toStringAsFixed(2)}',
               label: 'Total Value',
-              color: AppColors.primaryBlue,
+              color: AppTheme.primaryBlue,
             ),
             const SizedBox(width: 8),
             _buildMetricChip(
               icon: Icons.discount,
               value: '₹${_calculatePotentialSavings().toStringAsFixed(2)}',
               label: 'You Save',
-              color: AppColors.accentGreen,
+              color: AppTheme.accentGreen,
             ),
             const SizedBox(width: 8),
             _buildMetricChip(
               icon: Icons.star,
               value: favorites.length.toString(),
               label: 'Items',
-              color: AppColors.accentOrange,
+              color: AppTheme.accentOrange,
             ),
             const SizedBox(width: 8),
             _buildMetricChip(
               icon: Icons.local_offer,
               value: '${_calculateDiscountPercentage().toStringAsFixed(0)}%',
               label: 'Avg Discount',
-              color: AppColors.errorColor,
+              color: AppTheme.errorColor,
             ),
           ],
         ),
@@ -651,14 +652,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             children: [
               Text(
                 value,
-                style: AppTextStyles.bodyMedium.copyWith(
+                style: AppTheme.bodyMedium.copyWith(
                   fontWeight: FontWeight.bold,
                   color: color,
                 ),
               ),
               Text(
                 label,
-                style: AppTextStyles.caption.copyWith(color: color),
+                style: AppTheme.caption.copyWith(color: color),
               ),
             ],
           ),
@@ -770,13 +771,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Clear all favorites?', style: AppTextStyles.headlineSmall),
+        title: Text('Clear all favorites?', style: AppTheme.headlineSmall),
         content: Text('This will remove all ${favorites.length} items from your favorites list.', 
-                     style: AppTextStyles.bodyMedium),
+                     style: AppTheme.bodyMedium),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppTextStyles.bodyMedium),
+            child: Text('Cancel', style: AppTheme.bodyMedium),
           ),
           TextButton(
             onPressed: () {
@@ -800,7 +801,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               );
             },
             child: Text('Clear All', 
-                       style: AppTextStyles.bodyMedium.copyWith(color: AppColors.errorColor)),
+                       style: AppTheme.bodyMedium.copyWith(color: AppTheme.errorColor)),
           ),
         ],
       ),
@@ -845,508 +846,6 @@ class FavoriteModel {
 // Addresses Screen - Complete Implementation
 
 
-class AddressesScreen extends StatefulWidget {
-  const AddressesScreen({Key? key}) : super(key: key);
-
-  @override
-  State<AddressesScreen> createState() => _AddressesScreenState();
-}
-
-class _AddressesScreenState extends State<AddressesScreen> {
-  List<AddressModel> addresses = [];
-  bool _isLoading = true;
-  String? _errorMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAddresses();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      floatingActionButton: _buildFloatingActionButton(),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: Text(
-        'My Addresses',
-        style: AppTextStyles.headlineSmall.copyWith(
-          fontWeight: FontWeight.w600,
-          color: AppColors.primaryDark,
-        ),
-      ),
-      centerTitle: false,
-      backgroundColor: AppColors.backgroundWhite,
-      elevation: 0,
-     leading: IconButton(
-  icon: Icon(FeatherIcons.arrowLeft, color: AppColors.primaryDark, size: 24),
-  onPressed: () => Navigator.pop(context),
-),
-      actions: [
-        IconButton(
-          icon: Icon(FeatherIcons.plus, color: AppColors.primaryDark, size: 24),
-          onPressed: _addNewAddress,
-          tooltip: 'Add new address',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBody() {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (_errorMessage != null) {
-      return Center(
-        child: ErrorRetryWidget(
-          message: _errorMessage!,
-          onRetry: _loadAddresses,
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadAddresses,
-      child: addresses.isEmpty ? _buildEmptyState() : _buildAddressList(),
-    );
-  }
-
-  Widget _buildAddressList() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        children: [
-          // Default address section
-          if (addresses.any((a) => a.isDefault))
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, bottom: 8),
-                  child: Text(
-                    'DEFAULT ADDRESS',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textMedium,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                _buildAddressCard(
-                  addresses.firstWhere((a) => a.isDefault),
-                  isDefault: true,
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, bottom: 8),
-                  child: Text(
-                    'OTHER ADDRESSES',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.textMedium,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          // Other addresses
-          ...addresses.where((a) => !a.isDefault).map(
-                (address) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: _buildAddressCard(address),
-                ),
-              ),
-          const SizedBox(height: 80), // Space for FAB
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAddressCard(AddressModel address, {bool isDefault = false}) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: isDefault ? AppColors.primaryBlue : AppColors.dividerColor,
-          width: isDefault ? 1.5 : 1,
-        ),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => _editAddress(address),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    address.fullName,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (isDefault)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBlue.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'DEFAULT',
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.primaryBlue,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                address.addressLine,
-                style: AppTextStyles.bodyMedium,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '${address.city}, ${address.state} - ${address.pincode}',
-                style: AppTextStyles.bodyMedium,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Phone: ${address.phoneNumber}',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textMedium,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _buildActionButton(
-                    icon: Icons.edit_outlined,
-                    label: 'Edit',
-                    onPressed: () => _editAddress(address),
-                  ),
-                  const SizedBox(width: 12),
-                  _buildActionButton(
-                    icon: Icons.delete_outline,
-                    label: 'Delete',
-                    color: AppColors.errorColor,
-                    onPressed: () => _confirmDelete(address),
-                  ),
-                  const Spacer(),
-                  if (!isDefault)
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () => _setAsDefault(address),
-                      child: Text(
-                        'SET AS DEFAULT',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.primaryBlue,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    Color? color,
-    required VoidCallback onPressed,
-  }) {
-    return TextButton.icon(
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      onPressed: onPressed,
-      icon: Icon(
-        icon,
-        size: 18,
-        color: color ?? AppColors.primaryBlue,
-      ),
-      label: Text(
-        label,
-        style: AppTextStyles.bodySmall.copyWith(
-          color: color ?? AppColors.primaryBlue,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          const SizedBox(height: 40),
-            Icon(
-        Icons.home_outlined,
-        size: MediaQuery.of(context).size.width * 0.6,
-        color: Colors.grey[400],
-      ),
-          const SizedBox(height: 32),
-          Text(
-            'No Addresses Added',
-            style: AppTextStyles.headlineSmall.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Add your delivery addresses for faster checkout experience',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textMedium,
-            ),
-          ),
-          const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryBlue,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: _addNewAddress,
-              child: Text(
-                'Add New Address',
-                style: AppTextStyles.buttonText,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: _addNewAddress,
-      backgroundColor: AppColors.primaryBlue,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Icon(
-  Icons.add,
-  size: 24,
-  color: Colors.white,
-),
-
-    );
-  }
-
-  Future<void> _loadAddresses() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      // Simulate network call
-      await Future.delayed(const Duration(seconds: 1));
-
-      // Replace with actual API call
-      final loadedAddresses = [
-        AddressModel(
-          id: '1',
-          fullName: 'John Doe',
-          addressLine: '123 Main Street, Apartment 4B',
-          city: 'Mumbai',
-          state: 'Maharashtra',
-          pincode: '400001',
-          phoneNumber: '+91 9876543210',
-          isDefault: true,
-          addressType: 'Home',
-        ),
-        AddressModel(
-          id: '2',
-          fullName: 'John Doe',
-          addressLine: '456 Office Complex, Floor 3',
-          city: 'Mumbai',
-          state: 'Maharashtra',
-          pincode: '400002',
-          phoneNumber: '+91 9876543210',
-          isDefault: false,
-          addressType: 'Work',
-        ),
-      ];
-
-      setState(() {
-        addresses = loadedAddresses;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to load addresses. Please try again.';
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _addNewAddress() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddressesScreen(),
-        fullscreenDialog: true,
-      ),
-    ).then((_) => _loadAddresses());
-  }
-
-  void _editAddress(AddressModel address) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddressesScreen(),
-        fullscreenDialog: true,
-      ),
-    ).then((_) => _loadAddresses());
-  }
-
-  void _confirmDelete(AddressModel address) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Delete Address',
-          style: AppTextStyles.headlineSmall,
-        ),
-        content: Text(
-          'Are you sure you want to delete this address?',
-          style: AppTextStyles.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.primaryBlue,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              _deleteAddress(address);
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Delete',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.errorColor,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _deleteAddress(AddressModel address) async {
-    try {
-      // Show loading state
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Deleting address...'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      setState(() {
-        addresses.removeWhere((item) => item.id == address.id);
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Address deleted successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to delete address: ${e.toString()}'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  Future<void> _setAsDefault(AddressModel address) async {
-    try {
-      // Show loading state
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Updating default address...'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      setState(() {
-        for (var addr in addresses) {
-          addr.isDefault = false;
-        }
-        address.isDefault = true;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Default address updated successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update default address: ${e.toString()}'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-}
 
 class ErrorRetryWidget extends StatelessWidget {
   final String message;
@@ -1367,26 +866,26 @@ class ErrorRetryWidget extends StatelessWidget {
          Icon(
     Icons.error_outline,
     size: 64,
-    color: AppColors.errorColor,
+    color: AppTheme.errorColor,
   ),
           const SizedBox(height: 16),
           Text(
             message,
-            style: AppTextStyles.bodyMedium,
+            style: AppTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: onRetry,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBlue,
+              backgroundColor: AppTheme.primaryBlue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
             child: Text(
               'Retry',
-              style: AppTextStyles.buttonText,
+              style: AppTheme.buttonText,
             ),
           ),
         ],
@@ -1774,16 +1273,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Settings',
-          style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primaryDark),
+          style: AppTheme.headlineMedium.copyWith(color: AppTheme.primaryDark),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColors.backgroundWhite,
-        iconTheme: const IconThemeData(color: AppColors.primaryDark),
+        backgroundColor: AppTheme.backgroundColor,
+        iconTheme: const IconThemeData(color: AppTheme.primaryDark),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -1830,7 +1329,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _notificationsEnabled = value;
                       });
                     },
-                    activeColor: AppColors.accentGreen,
+                    activeColor: AppTheme.accentGreen,
                   ),
                 ),
                 _buildDivider(),
@@ -1844,7 +1343,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _darkModeEnabled = value;
                       });
                     },
-                    activeColor: AppColors.accentGreen,
+                    activeColor: AppTheme.accentGreen,
                   ),
                 ),
                 _buildDivider(),
@@ -1858,7 +1357,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         _biometricAuthEnabled = value;
                       });
                     },
-                    activeColor: AppColors.accentGreen,
+                    activeColor: AppTheme.accentGreen,
                   ),
                 ),
                 _buildDivider(),
@@ -1868,11 +1367,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   trailing: DropdownButton<String>(
                     value: _selectedLanguage,
                     underline: Container(),
-                    icon: const Icon(Icons.arrow_drop_down, color: AppColors.textMedium),
+                    icon: const Icon(Icons.arrow_drop_down, color: AppTheme.textMedium),
                     items: _languages.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value, style: AppTextStyles.bodyMedium),
+                        child: Text(value, style: AppTheme.bodyMedium),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -1889,11 +1388,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   trailing: DropdownButton<String>(
                     value: _selectedCurrency,
                     underline: Container(),
-                    icon: const Icon(Icons.arrow_drop_down, color: AppColors.textMedium),
+                    icon: const Icon(Icons.arrow_drop_down, color: AppTheme.textMedium),
                     items: _currencies.map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value, style: AppTextStyles.bodyMedium),
+                        child: Text(value, style: AppTheme.bodyMedium),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -1948,7 +1447,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.errorColor,
+                    backgroundColor: AppTheme.errorColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -1957,7 +1456,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: _confirmLogout,
                   child: Text(
                     'Logout',
-                    style: AppTextStyles.buttonText,
+                    style: AppTheme.buttonText,
                   ),
                 ),
               ),
@@ -1969,7 +1468,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Center(
               child: Text(
                 'Version 1.2.3 (Build 456)',
-                style: AppTextStyles.caption.copyWith(color: AppColors.textLight),
+                style: AppTheme.caption.copyWith(color: AppTheme.textLight),
               ),
             ),
           ],
@@ -1983,7 +1482,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         title,
-        style: AppTextStyles.headlineSmall.copyWith(color: AppColors.primaryDark),
+        style: AppTheme.headlineSmall.copyWith(color: AppTheme.primaryDark),
       ),
     );
   }
@@ -1993,7 +1492,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.dividerColor, width: 1),
+        side: BorderSide(color: AppTheme.dividerColor, width: 1),
       ),
       child: Column(
         children: children,
@@ -2008,9 +1507,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     VoidCallback? onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primaryBlue),
-      title: Text(title, style: AppTextStyles.bodyLarge),
-      trailing: trailing ?? const Icon(Icons.chevron_right, color: AppColors.textLight),
+      leading: Icon(icon, color: AppTheme.primaryBlue),
+      title: Text(title, style: AppTheme.bodyLarge),
+      trailing: trailing ?? const Icon(Icons.chevron_right, color: AppTheme.textLight),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       minLeadingWidth: 24,
@@ -2020,7 +1519,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Divider(height: 1, color: AppColors.dividerColor),
+      child: Divider(height: 1, color: AppTheme.dividerColor),
     );
   }
 
@@ -2061,19 +1560,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Logout', style: AppTextStyles.headlineSmall),
-        content: Text('Are you sure you want to logout?', style: AppTextStyles.bodyMedium),
+        title: Text('Logout', style: AppTheme.headlineSmall),
+        content: Text('Are you sure you want to logout?', style: AppTheme.bodyMedium),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryBlue)),
+            child: Text('Cancel', style: AppTheme.bodyMedium.copyWith(color: AppTheme.primaryBlue)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               // Implement logout logic
             },
-            child: Text('Logout', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.errorColor)),
+            child: Text('Logout', style: AppTheme.bodyMedium.copyWith(color: AppTheme.errorColor)),
           ),
         ],
       ),
@@ -2099,30 +1598,30 @@ class HelpSupportScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         title,
-        style: AppTextStyles.headlineSmall.copyWith(color: AppColors.primaryDark),
+        style: AppTheme.headlineSmall.copyWith(color: AppTheme.primaryDark),
       ),
     );
   }
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Divider(height: 1, color: AppColors.dividerColor),
+      child: Divider(height: 1, color: AppTheme.dividerColor),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Help & Support',
-          style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primaryDark),
+          style: AppTheme.headlineMedium.copyWith(color: AppTheme.primaryDark),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColors.backgroundWhite,
-        iconTheme: const IconThemeData(color: AppColors.primaryDark),
+        backgroundColor: AppTheme.backgroundColor,
+        iconTheme: const IconThemeData(color: AppTheme.primaryDark),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -2210,7 +1709,7 @@ class HelpSupportScreen extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.errorColor),
+                    side: BorderSide(color: AppTheme.errorColor),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -2219,7 +1718,7 @@ class HelpSupportScreen extends StatelessWidget {
                   onPressed: () => _reportProblem(context),
                   child: Text(
                     'Report a Problem',
-                    style: AppTextStyles.buttonText.copyWith(color: AppColors.errorColor),
+                    style: AppTheme.buttonText.copyWith(color: AppTheme.errorColor),
                   ),
                 ),
               ),
@@ -2235,7 +1734,7 @@ class HelpSupportScreen extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: AppColors.dividerColor, width: 1),
+        side: BorderSide(color: AppTheme.dividerColor, width: 1),
       ),
       child: Column(
         children: children,
@@ -2249,9 +1748,9 @@ class HelpSupportScreen extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return ListTile(
-      leading: icon != null ? Icon(icon, color: AppColors.primaryBlue) : null,
-      title: Text(title, style: AppTextStyles.bodyLarge),
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textLight),
+      leading: icon != null ? Icon(icon, color: AppTheme.primaryBlue) : null,
+      title: Text(title, style: AppTheme.bodyLarge),
+      trailing: const Icon(Icons.chevron_right, color: AppTheme.textLight),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
@@ -2264,10 +1763,10 @@ class HelpSupportScreen extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primaryBlue),
-      title: Text(title, style: AppTextStyles.bodyLarge),
-      subtitle: Text(subtitle, style: AppTextStyles.bodySmall),
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textLight),
+      leading: Icon(icon, color: AppTheme.primaryBlue),
+      title: Text(title, style: AppTheme.bodyLarge),
+      subtitle: Text(subtitle, style: AppTheme.bodySmall),
+      trailing: const Icon(Icons.chevron_right, color: AppTheme.textLight),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
@@ -2277,12 +1776,12 @@ class HelpSupportScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('FAQ Answer', style: AppTextStyles.headlineSmall),
-        content: Text(answer, style: AppTextStyles.bodyMedium),
+        title: Text('FAQ Answer', style: AppTheme.headlineSmall),
+        content: Text(answer, style: AppTheme.bodyMedium),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Close', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryBlue)),
+            child: Text('Close', style: AppTheme.bodyMedium.copyWith(color: AppTheme.primaryBlue)),
           ),
         ],
       ),
@@ -2384,16 +1883,16 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Report a Problem',
-          style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primaryDark),
+          style: AppTheme.headlineMedium.copyWith(color: AppTheme.primaryDark),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColors.backgroundWhite,
-        iconTheme: const IconThemeData(color: AppColors.primaryDark),
+        backgroundColor: AppTheme.backgroundColor,
+        iconTheme: const IconThemeData(color: AppTheme.primaryDark),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -2404,7 +1903,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
             children: [
               Text(
                 'Help us understand the problem',
-                style: AppTextStyles.bodyLarge,
+                style: AppTheme.bodyLarge,
               ),
               const SizedBox(height: 16),
 
@@ -2421,7 +1920,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 items: _problemTypes.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value, style: AppTextStyles.bodyMedium),
+                    child: Text(value, style: AppTheme.bodyMedium),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
@@ -2490,12 +1989,12 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 children: [
                   Text(
                     'Add Screenshot (optional)',
-                    style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMedium),
+                    style: AppTheme.bodyMedium.copyWith(color: AppTheme.textMedium),
                   ),
                   const SizedBox(height: 8),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppColors.primaryBlue),
+                      side: BorderSide(color: AppTheme.primaryBlue),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -2505,11 +2004,11 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.attach_file, color: AppColors.primaryBlue),
+                        const Icon(Icons.attach_file, color: AppTheme.primaryBlue),
                         const SizedBox(width: 8),
                         Text(
                           'Attach File',
-                          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primaryBlue),
+                          style: AppTheme.bodyMedium.copyWith(color: AppTheme.primaryBlue),
                         ),
                       ],
                     ),
@@ -2524,7 +2023,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryBlue,
+                    backgroundColor: AppTheme.primaryBlue,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -2533,7 +2032,7 @@ class _ReportProblemScreenState extends State<ReportProblemScreen> {
                   onPressed: _submitProblemReport,
                   child: Text(
                     'Submit Report',
-                    style: AppTextStyles.buttonText,
+                    style: AppTheme.buttonText,
                   ),
                 ),
               ),

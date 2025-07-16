@@ -4,7 +4,8 @@ class OfferingServiceDTO {
   final String? offeringCode;
   final String title;
   final String description;
-  final String category;
+  final ServiceCategoryDto category;
+
   final String status;
   final bool verified;
   final ServiceTiming timing;
@@ -36,7 +37,7 @@ class OfferingServiceDTO {
       offeringCode: json['offeringCode']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
       description: json['description']?.toString() ?? '',
-      category: json['category']?.toString() ?? '',
+      category: ServiceCategoryDto.fromJson(json['category'] ?? {}),
       status: json['status']?.toString() ?? 'ACTIVE',
       verified: json['verified'] as bool? ?? false,
       timing: ServiceTiming.fromJson(json['timing'] ?? {}),
@@ -75,7 +76,7 @@ class OfferingServiceDTO {
     String? offeringCode,
     String? displayName,
     String? shortDescription,
-    String? category,
+    ServiceCategoryDto? category,
     String? status,
     bool? verified,
     ServiceTiming? timing,
@@ -375,4 +376,62 @@ class AdvancePolicy {
       'advancePaymentMethod': advancePaymentMethod,
     if (advanceTerms != null) 'advanceTerms': advanceTerms,
   };
+}
+
+
+class CategoryDTO {
+  final String categoryName;
+  final List<String> subcategories;
+
+  CategoryDTO({
+    required this.categoryName,
+    required this.subcategories,
+  });
+
+  factory CategoryDTO.fromJson(Map<String, dynamic> json) {
+    return CategoryDTO(
+      categoryName: json['categoryName'] ?? '',
+      subcategories: List<String>.from(json['subcategories'] ?? []),
+    );
+  }
+}
+
+class ServiceCategoryDto {
+  final String id;
+  final String name;
+  final String? description;
+  final String? parentId;
+  final String? route;
+  final DateTime? createdOn;
+
+  ServiceCategoryDto({
+    required this.id,
+    required this.name,
+    this.description,
+    this.parentId,
+    this.route,
+    this.createdOn,
+  });
+
+  factory ServiceCategoryDto.fromJson(Map<String, dynamic> json) {
+    return ServiceCategoryDto(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'],
+      parentId: json['parentId'],
+      route: json['route'],
+      createdOn: json['createdOn'] != null ? DateTime.tryParse(json['createdOn']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      if (description != null) 'description': description,
+      if (parentId != null) 'parentId': parentId,
+      if (route != null) 'route': route,
+      if (createdOn != null) 'createdOn': createdOn!.toIso8601String(),
+    };
+  }
 }

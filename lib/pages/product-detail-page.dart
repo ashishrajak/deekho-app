@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 
 // ==================== DTO Classes ====================
@@ -47,9 +48,9 @@ class ProductDto {
     return 'In Stock';
   }
   Color get stockColor {
-    if (stock <= 0) return AppColors.warningColor;
-    if (stock <= 5) return AppColors.accentOrange;
-    return AppColors.accentGreen;
+    if (stock <= 0) return AppTheme.warningColor;
+    if (stock <= 5) return AppTheme.accentOrange;
+    return AppTheme.accentGreen;
   }
 }
 
@@ -274,7 +275,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: const Text('Product Details'),
         centerTitle: true,
@@ -326,7 +327,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               return GestureDetector(
                 onTap: () => _showFullScreenImage(index),
                 child: Container(
-                  color: AppColors.cardBackground,
+                  color: AppTheme.cardBackground,
                   child: Image.network(
                     product.imageUrls[index],
                     fit: BoxFit.contain,
@@ -351,8 +352,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _currentImageIndex == index
-                      ? AppColors.primaryBlue
-                      : AppColors.textLight,
+                      ? AppTheme.primaryBlue
+                      : AppTheme.textLight,
                 ),
               );
             }),
@@ -367,7 +368,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       margin: const EdgeInsets.only(bottom: AppDimensions.sectionSpacing),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -380,7 +381,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(product.title, style: AppTextStyles.headlineMedium),
+          Text(product.title, style: AppTheme.headlineMedium),
           const SizedBox(height: AppDimensions.smallElementSpacing),
           Row(
             children: [
@@ -388,7 +389,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               const SizedBox(width: AppDimensions.smallElementSpacing),
               Text(
                 '${product.rating} (${product.reviewCount} reviews)',
-                style: AppTextStyles.bodyMedium,
+                style: AppTheme.bodyMedium,
               ),
             ],
           ),
@@ -397,30 +398,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               Text(
                 '₹${product.price.toInt()}',
-                style: AppTextStyles.headlineLarge.copyWith(
-                  color: AppColors.primaryBlue,
+                style: AppTheme.headlineLarge.copyWith(
+                  color: AppTheme.primaryBlue,
                 ),
               ),
               if (product.hasDiscount) ...[
                 const SizedBox(width: AppDimensions.smallElementSpacing),
                 Text(
                   '₹${product.originalPrice!.toInt()}',
-                  style: AppTextStyles.bodyLarge.copyWith(
+                  style: AppTheme.bodyLarge.copyWith(
                     decoration: TextDecoration.lineThrough,
-                    color: AppColors.textLight,
+                    color: AppTheme.textLight,
                   ),
                 ),
                 const SizedBox(width: AppDimensions.smallElementSpacing),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.accentGreen.withOpacity(0.2),
+                    color: AppTheme.accentGreen.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
                     '${product.discountPercentage.toInt()}% OFF',
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.accentGreen,
+                    style: AppTheme.caption.copyWith(
+                      color: AppTheme.accentGreen,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -439,15 +440,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               const SizedBox(width: 4),
               Text(
                 product.stockStatus,
-                style: AppTextStyles.bodyMedium.copyWith(
+                style: AppTheme.bodyMedium.copyWith(
                   color: product.stockColor,
                 ),
               ),
               const Spacer(),
               Text(
                 'Delivery by Tomorrow',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.primaryBlue,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.primaryBlue,
                 ),
               ),
             ],
@@ -455,11 +456,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           const SizedBox(height: AppDimensions.elementSpacing),
           Row(
             children: [
-              Text('Quantity:', style: AppTextStyles.bodyLarge),
+              Text('Quantity:', style: AppTheme.bodyLarge),
               const Spacer(),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.dividerColor),
+                  border: Border.all(color: AppTheme.dividerColor),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -468,7 +469,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       icon: const Icon(Icons.remove, size: 18),
                       onPressed: _decrementQuantity,
                     ),
-                    Text('$_quantity', style: AppTextStyles.bodyLarge),
+                    Text('$_quantity', style: AppTheme.bodyLarge),
                     IconButton(
                       icon: const Icon(Icons.add, size: 18),
                       onPressed: _incrementQuantity,
@@ -488,7 +489,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       margin: const EdgeInsets.only(bottom: AppDimensions.sectionSpacing),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -501,7 +502,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Offers & Delivery', style: AppTextStyles.headlineSmall),
+          Text('Offers & Delivery', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.elementSpacing),
           ...product.offers.map((offer) => _buildOfferItem(offer)).toList(),
           const Divider(height: 24),
@@ -527,7 +528,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       margin: const EdgeInsets.only(bottom: AppDimensions.sectionSpacing),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -540,15 +541,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Description', style: AppTextStyles.headlineSmall),
+          Text('Description', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.elementSpacing),
-          Text(product.description, style: AppTextStyles.bodyLarge),
+          Text(product.description, style: AppTheme.bodyLarge),
           const SizedBox(height: AppDimensions.elementSpacing),
-          Text('Key Features', style: AppTextStyles.headlineSmall),
+          Text('Key Features', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.smallElementSpacing),
           ...product.features.map((feature) => _buildBulletPoint(feature)).toList(),
           const SizedBox(height: AppDimensions.elementSpacing),
-          Text('Specifications', style: AppTextStyles.headlineSmall),
+          Text('Specifications', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.smallElementSpacing),
           ...product.specifications.entries.map(
             (entry) => _buildSpecificationRow(entry.key, entry.value),
@@ -563,7 +564,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       margin: const EdgeInsets.only(bottom: AppDimensions.sectionSpacing),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -580,7 +581,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: AppColors.dividerColor,
+                backgroundColor: AppTheme.dividerColor,
                 backgroundImage: product.vendor.logoUrl != null 
                     ? NetworkImage(product.vendor.logoUrl!)
                     : null,
@@ -592,7 +593,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.vendor.name, style: AppTextStyles.headlineSmall),
+                  Text(product.vendor.name, style: AppTheme.headlineSmall),
                   const SizedBox(height: 2),
                   Row(
                     children: [
@@ -600,7 +601,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       const SizedBox(width: 4),
                       Text(
                         '${product.vendor.rating} (${product.vendor.reviewCount} reviews)',
-                        style: AppTextStyles.caption,
+                        style: AppTheme.caption,
                       ),
                     ],
                   ),
@@ -620,7 +621,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text('View Store', style: AppTextStyles.bodyMedium),
+                  child: Text('View Store', style: AppTheme.bodyMedium),
                 ),
               ),
               const SizedBox(width: AppDimensions.elementSpacing),
@@ -628,13 +629,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: ElevatedButton(
                   onPressed: _toggleFollowVendor,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryBlue,
+                    backgroundColor: AppTheme.primaryBlue,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text('Follow', style: AppTextStyles.buttonText),
+                  child: Text('Follow', style: AppTheme.buttonText),
                 ),
               ),
             ],
@@ -649,7 +650,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       margin: const EdgeInsets.only(bottom: AppDimensions.sectionSpacing),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -665,13 +666,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Customer Reviews', style: AppTextStyles.headlineSmall),
+              Text('Customer Reviews', style: AppTheme.headlineSmall),
               TextButton(
                 onPressed: _viewAllReviews,
                 child: Text(
                   'See All',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.primaryBlue,
+                  style: AppTheme.bodyMedium.copyWith(
+                    color: AppTheme.primaryBlue,
                   ),
                 ),
               ),
@@ -682,9 +683,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [
               Column(
                 children: [
-                  Text(product.rating.toString(), style: AppTextStyles.headlineLarge),
+                  Text(product.rating.toString(), style: AppTheme.headlineLarge),
                   _buildRatingStars(product.rating),
-                  Text('${product.reviewCount} reviews', style: AppTextStyles.caption),
+                  Text('${product.reviewCount} reviews', style: AppTheme.caption),
                 ],
               ),
               const SizedBox(width: AppDimensions.elementSpacing),
@@ -712,13 +713,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ElevatedButton(
             onPressed: _writeReview,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBlue,
+              backgroundColor: AppTheme.primaryBlue,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text('Write a Review', style: AppTextStyles.buttonText),
+            child: Text('Write a Review', style: AppTheme.buttonText),
           ),
         ],
       ),
@@ -729,7 +730,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.cardPadding),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
         boxShadow: [
           BoxShadow(
@@ -742,7 +743,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('You May Also Like', style: AppTextStyles.headlineSmall),
+          Text('You May Also Like', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.elementSpacing),
           SizedBox(
             height: 220,
@@ -775,7 +776,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(height: AppDimensions.smallElementSpacing),
                         Text(
                           relatedProduct.title,
-                          style: AppTextStyles.bodyMedium,
+                          style: AppTheme.bodyMedium,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -784,15 +785,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const SizedBox(height: 4),
                         Text(
                           '₹${relatedProduct.price.toInt()}',
-                          style: AppTextStyles.bodyLarge.copyWith(
+                          style: AppTheme.bodyLarge.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: AppColors.primaryBlue,
+                            color: AppTheme.primaryBlue,
                           ),
                         ),
                         if (relatedProduct.hasDiscount)
                           Text(
                             '₹${relatedProduct.originalPrice!.toInt()}',
-                            style: AppTextStyles.caption.copyWith(
+                            style: AppTheme.caption.copyWith(
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
@@ -804,7 +805,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
           const SizedBox(height: AppDimensions.elementSpacing),
-          Text('Frequently Bought Together', style: AppTextStyles.headlineSmall),
+          Text('Frequently Bought Together', style: AppTheme.headlineSmall),
           const SizedBox(height: AppDimensions.elementSpacing),
           ListView.builder(
             shrinkWrap: true,
@@ -823,14 +824,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                 ),
-                title: Text('Accessory ${index + 1}', style: AppTextStyles.bodyMedium),
-                subtitle: Text('₹${(index + 1) * 499}', style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.primaryBlue,
+                title: Text('Accessory ${index + 1}', style: AppTheme.bodyMedium),
+                subtitle: Text('₹${(index + 1) * 499}', style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.primaryBlue,
                 )),
                 trailing: Checkbox(
                   value: index == 0,
                   onChanged: (value) {},
-                  activeColor: AppColors.primaryBlue,
+                  activeColor: AppTheme.primaryBlue,
                 ),
               );
             },
@@ -838,10 +839,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           const SizedBox(height: AppDimensions.elementSpacing),
           Row(
             children: [
-              Text('Total:', style: AppTextStyles.bodyLarge),
+              Text('Total:', style: AppTheme.bodyLarge),
               const Spacer(),
-              Text('₹${(product.price + 499).toInt()}', style: AppTextStyles.headlineSmall.copyWith(
-                color: AppColors.primaryBlue,
+              Text('₹${(product.price + 499).toInt()}', style: AppTheme.headlineSmall.copyWith(
+                color: AppTheme.primaryBlue,
               )),
             ],
           ),
@@ -849,13 +850,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ElevatedButton(
             onPressed: _addBundleToCart,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accentGreen,
+              backgroundColor: AppTheme.accentGreen,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text('Add All to Cart', style: AppTextStyles.buttonText),
+            child: Text('Add All to Cart', style: AppTheme.buttonText),
           ),
         ],
       ),
@@ -866,7 +867,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -886,10 +887,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  side: BorderSide(color: AppColors.primaryBlue),
+                  side: BorderSide(color: AppTheme.primaryBlue),
                 ),
-                child: Text('Add to Cart', style: AppTextStyles.buttonText.copyWith(
-                  color: AppColors.primaryBlue,
+                child: Text('Add to Cart', style: AppTheme.buttonText.copyWith(
+                  color: AppTheme.primaryBlue,
                 )),
               ),
             ),
@@ -898,13 +899,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: ElevatedButton(
                 onPressed: _buyNow,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryBlue,
+                  backgroundColor: AppTheme.primaryBlue,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text('Buy Now', style: AppTextStyles.buttonText),
+                child: Text('Buy Now', style: AppTheme.buttonText),
               ),
             ),
           ],
@@ -920,7 +921,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       children: List.generate(5, (index) {
         return Icon(
           index < rating.floor() ? Icons.star : Icons.star_border,
-          color: AppColors.accentOrange,
+          color: AppTheme.accentOrange,
           size: 16,
         );
       }),
@@ -933,16 +934,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(offer.icon, color: AppColors.primaryBlue, size: 16),
+          Icon(offer.icon, color: AppTheme.primaryBlue, size: 16),
           const SizedBox(width: AppDimensions.smallElementSpacing),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(offer.title, style: AppTextStyles.bodyMedium.copyWith(
+                Text(offer.title, style: AppTheme.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                 )),
-                Text(offer.description, style: AppTextStyles.bodyMedium),
+                Text(offer.description, style: AppTheme.bodyMedium),
               ],
             ),
           ),
@@ -956,9 +957,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.only(bottom: AppDimensions.smallElementSpacing),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.textMedium, size: 16),
+          Icon(icon, color: AppTheme.textMedium, size: 16),
           const SizedBox(width: AppDimensions.smallElementSpacing),
-          Text(text, style: AppTextStyles.bodyMedium),
+          Text(text, style: AppTheme.bodyMedium),
         ],
       ),
     );
@@ -972,7 +973,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           const Text('•', style: TextStyle(fontSize: 16)),
           const SizedBox(width: AppDimensions.smallElementSpacing),
-          Expanded(child: Text(text, style: AppTextStyles.bodyLarge)),
+          Expanded(child: Text(text, style: AppTheme.bodyLarge)),
         ],
       ),
     );
@@ -985,11 +986,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           SizedBox(
             width: 100,
-            child: Text(title, style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textMedium,
+            child: Text(title, style: AppTheme.bodyMedium.copyWith(
+              color: AppTheme.textMedium,
             )),
           ),
-          Text(value, style: AppTextStyles.bodyLarge),
+          Text(value, style: AppTheme.bodyLarge),
         ],
       ),
     );
@@ -1000,19 +1001,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         children: [
-          Text('$stars★', style: AppTextStyles.caption),
+          Text('$stars★', style: AppTheme.caption),
           const SizedBox(width: AppDimensions.smallElementSpacing),
           Expanded(
             child: LinearProgressIndicator(
               value: percentage / 100,
-              backgroundColor: AppColors.dividerColor,
-              color: AppColors.accentOrange,
+              backgroundColor: AppTheme.dividerColor,
+              color: AppTheme.accentOrange,
               minHeight: 6,
               borderRadius: BorderRadius.circular(3),
             ),
           ),
           const SizedBox(width: AppDimensions.smallElementSpacing),
-          Text('$percentage%', style: AppTextStyles.caption),
+          Text('$percentage%', style: AppTheme.caption),
         ],
       ),
     );
@@ -1026,17 +1027,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             const CircleAvatar(
               radius: 16,
-              backgroundColor: AppColors.dividerColor,
-              child: Icon(Icons.person, size: 16, color: AppColors.textMedium),
+              backgroundColor: AppTheme.dividerColor,
+              child: Icon(Icons.person, size: 16, color: AppTheme.textMedium),
             ),
             const SizedBox(width: AppDimensions.smallElementSpacing),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(review.author, style: AppTextStyles.bodyMedium.copyWith(
+                Text(review.author, style: AppTheme.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                 )),
-                Text(review.date, style: AppTextStyles.caption),
+                Text(review.date, style: AppTheme.caption),
               ],
             ),
             const Spacer(),
@@ -1044,11 +1045,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ],
         ),
         const SizedBox(height: AppDimensions.smallElementSpacing),
-        Text(review.title, style: AppTextStyles.bodyLarge.copyWith(
+        Text(review.title, style: AppTheme.bodyLarge.copyWith(
           fontWeight: FontWeight.w600,
         )),
         const SizedBox(height: 4),
-        Text(review.content, style: AppTextStyles.bodyMedium),
+        Text(review.content, style: AppTheme.bodyMedium),
         if (review.imageUrls != null && review.imageUrls!.isNotEmpty) ...[
           const SizedBox(height: AppDimensions.smallElementSpacing),
           SizedBox(

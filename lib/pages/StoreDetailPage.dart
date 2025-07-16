@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/config/AppTheme.dart';
 import 'package:my_flutter_app/main.dart';
 
 
@@ -58,11 +59,11 @@ final similarStores = [
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(store.name, style: AppTextStyles.headlineSmall),
-        backgroundColor: AppColors.cardBackground,
+        title: Text(store.name, style: AppTheme.headlineSmall),
+        backgroundColor: AppTheme.cardBackground,
         elevation: 0,
       ),
-      backgroundColor: AppColors.backgroundWhite,
+      backgroundColor: AppTheme.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,32 +214,32 @@ class StoreHeader extends StatelessWidget {
       children: [
         Text(
           store.name,
-          style: AppTextStyles.headlineMedium.copyWith(
-            color: AppColors.primaryDark,
+          style: AppTheme.headlineMedium.copyWith(
+            color: AppTheme.primaryDark,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           "Quality You Can Trust",
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textMedium,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppTheme.textMedium,
           ),
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Icon(Icons.star, color: AppColors.accentOrange, size: 20),
+            Icon(Icons.star, color: AppTheme.accentOrange, size: 20),
             const SizedBox(width: 4),
             Text(
               "${store.rating} (${store.reviewCount} reviews)",
-              style: AppTextStyles.bodyMedium,
+              style: AppTheme.bodyMedium,
             ),
             const SizedBox(width: 16),
-            Icon(Icons.location_on, color: AppColors.primaryBlue, size: 20),
+            Icon(Icons.location_on, color: AppTheme.primaryBlue, size: 20),
             const SizedBox(width: 4),
             Text(
               "${store.distanceKm} km away",
-              style: AppTextStyles.bodyMedium,
+              style: AppTheme.bodyMedium,
             ),
           ],
         ),
@@ -246,7 +247,7 @@ class StoreHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: store.isOpen ? AppColors.successColor.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+            color: store.isOpen ? AppTheme.successColor.withOpacity(0.1) : Colors.red.withOpacity(0.1),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -255,13 +256,13 @@ class StoreHeader extends StatelessWidget {
               Icon(
                 Icons.circle,
                 size: 10,
-                color: store.isOpen ? AppColors.successColor : Colors.red,
+                color: store.isOpen ? AppTheme.successColor : Colors.red,
               ),
               const SizedBox(width: 8),
               Text(
                 store.isOpen ? "Open until ${store.openUntil}" : "Closed now",
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: store.isOpen ? AppColors.successColor : Colors.red,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: store.isOpen ? AppTheme.successColor : Colors.red,
                 ),
               ),
             ],
@@ -285,8 +286,8 @@ class StoreOffers extends StatelessWidget {
       children: [
         Text(
           "Current Offers",
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryDark,
+          style: AppTheme.headlineSmall.copyWith(
+            color: AppTheme.primaryDark,
           ),
         ),
         const SizedBox(height: 12),
@@ -300,12 +301,12 @@ class StoreOffers extends StatelessWidget {
                 width: 200,
                 margin: const EdgeInsets.only(right: 12),
                 child: Card(
-                  color: AppColors.accentOrange.withOpacity(0.1),
+                  color: AppTheme.accentOrange.withOpacity(0.1),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(
-                      color: AppColors.accentOrange.withOpacity(0.3),
+                      color: AppTheme.accentOrange.withOpacity(0.3),
                       width: 1,
                     ),
                   ),
@@ -316,13 +317,13 @@ class StoreOffers extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.local_offer,
-                          color: AppColors.accentOrange,
+                          color: AppTheme.accentOrange,
                           size: 24,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           offers[index],
-                          style: AppTextStyles.bodyMedium.copyWith(
+                          style: AppTheme.bodyMedium.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -356,8 +357,8 @@ class ProductList extends StatelessWidget {
       children: [
         Text(
           "Available Products",
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryDark,
+          style: AppTheme.headlineSmall.copyWith(
+            color: AppTheme.primaryDark,
           ),
         ),
         const SizedBox(height: 12),
@@ -378,7 +379,7 @@ class ProductList extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
-                  color: AppColors.dividerColor,
+                  color: AppTheme.dividerColor,
                   width: 1,
                 ),
               ),
@@ -397,7 +398,7 @@ class ProductList extends StatelessWidget {
                     const SizedBox(height: 12),
                     Text(
                       product.name,
-                      style: AppTextStyles.bodyMedium.copyWith(
+                      style: AppTheme.bodyMedium.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 2,
@@ -406,8 +407,8 @@ class ProductList extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       "₹${product.price.toStringAsFixed(2)}",
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: AppColors.primaryBlue,
+                      style: AppTheme.bodyLarge.copyWith(
+                        color: AppTheme.primaryBlue,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -415,7 +416,7 @@ class ProductList extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.accentGreen,
+                        backgroundColor: AppTheme.accentGreen,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -448,7 +449,7 @@ class StoreInfo extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: AppColors.dividerColor,
+          color: AppTheme.dividerColor,
           width: 1,
         ),
       ),
@@ -459,8 +460,8 @@ class StoreInfo extends StatelessWidget {
           children: [
             Text(
               "Store Information",
-              style: AppTextStyles.headlineSmall.copyWith(
-                color: AppColors.primaryDark,
+              style: AppTheme.headlineSmall.copyWith(
+                color: AppTheme.primaryDark,
               ),
             ),
             const SizedBox(height: 12),
@@ -479,7 +480,7 @@ class StoreInfo extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.primaryBlue, size: 24),
+        Icon(icon, color: AppTheme.primaryBlue, size: 24),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -487,14 +488,14 @@ class StoreInfo extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textMedium,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.textMedium,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 value,
-                style: AppTextStyles.bodyLarge.copyWith(
+                style: AppTheme.bodyLarge.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -519,15 +520,15 @@ class StoreDescription extends StatelessWidget {
       children: [
         Text(
           "About Us",
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryDark,
+          style: AppTheme.headlineSmall.copyWith(
+            color: AppTheme.primaryDark,
           ),
         ),
         const SizedBox(height: 12),
         Text(
           description,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textMedium,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppTheme.textMedium,
           ),
         ),
       ],
@@ -548,8 +549,8 @@ class SimilarStoresSection extends StatelessWidget {
       children: [
         Text(
           "Similar Nearby Stores",
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryDark,
+          style: AppTheme.headlineSmall.copyWith(
+            color: AppTheme.primaryDark,
           ),
         ),
         const SizedBox(height: 12),
@@ -568,7 +569,7 @@ class SimilarStoresSection extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(
-                      color: AppColors.dividerColor,
+                      color: AppTheme.dividerColor,
                       width: 1,
                     ),
                   ),
@@ -600,18 +601,18 @@ class SimilarStoresSection extends StatelessWidget {
                           const SizedBox(height: 8),
                           Text(
                             store.name,
-                            style: AppTextStyles.bodyMedium.copyWith(
+                            style: AppTheme.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              Icon(Icons.star, color: AppColors.accentOrange, size: 16),
+                              Icon(Icons.star, color: AppTheme.accentOrange, size: 16),
                               const SizedBox(width: 4),
                               Text(
                                 "${store.rating}",
-                                style: AppTextStyles.caption,
+                                style: AppTheme.caption,
                               ),
                             ],
                           ),
@@ -641,7 +642,7 @@ class StoreActions extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: AppTheme.cardBackground,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -660,7 +661,7 @@ class StoreActions extends StatelessWidget {
                 icon: const Icon(Icons.chat),
                 label: const Text("Chat"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryBlue,
+                  backgroundColor: AppTheme.primaryBlue,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -676,7 +677,7 @@ class StoreActions extends StatelessWidget {
                 icon: const Icon(Icons.call),
                 label: const Text("Call"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accentGreen,
+                  backgroundColor: AppTheme.accentGreen,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
